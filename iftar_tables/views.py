@@ -5,6 +5,6 @@ from django.shortcuts import render
 
 def home(request):
     context = {
-        'api_key': settings.MY_API_KEY
+        'api_key': settings.API_KEY
     }
     return render(request,'home.html',context)

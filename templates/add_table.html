@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- فورم إضافة المائدة -->
+        <div class="col-md-5">
+            <div class="card p-4 shadow-sm">
+                <h3 class="mb-4 text-olive">إضافة مائدة جديدة</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    <div class="alert alert-info small info-icon">
+                        <i class="fas fa-info-circle info-icon"></i> برجاء تحديد موقع المائدة بدقة على الخريطة.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-35" style="margin-left: 100px;">
+                        إضافة المائدة
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- الخريطة -->
+        <div class="col-md-7">
+            <div id="selection-map" style="height: 500px; width: 100%; border-radius: 15px; border: 2px solid #8b8666;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+let marker;
+
+function initMap() {
+    const Mansoura = { lat: 31.0364, lng: 31.3807 };
+    const map = new google.maps.Map(document.getElementById("selection-map"), {
+        zoom: 13,
+        center: Mansoura,
+    });
+
+    map.addListener("click", (e) => {
+        placeMarker(e.latLng, map);
+    });
+}
+
+function placeMarker(latLng, map) {
+    if (marker) {
+        marker.setPosition(latLng);
+    } else {
+        marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            draggable: true
+        });
+    }
+
+    document.getElementById("id_long").value = latLng.lng().toFixed(6);
+    document.getElementById("id_lat").value = latLng.lat().toFixed(6);
+
+    marker.addListener('dragend', function(event) {
+        document.getElementById("id_long").value = event.latLng.lng().toFixed(6);
+        document.getElementById("id_lat").value = event.latLng.lat().toFixed(6);
+    });
+}
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"></script>
+{% endblock %}

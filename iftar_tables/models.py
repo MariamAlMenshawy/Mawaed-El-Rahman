@@ -12,5 +12,4 @@ class IftarTable(models.Model):
     long = models.DecimalField(max_digits=9, decimal_places=6)
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     governorate = models.CharField(max_length=20)
-    photo = models.ImageField(upload_to='iftar_photos/', null=True, blank=True)
 

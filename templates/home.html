@@ -3,93 +3,137 @@
 
 {% block title %}home{% endblock %}
 
+{% block breadcrumb %}
+{% endblock %}
+
+{% block add_button %}
+    
+{% endblock %}
+
 {% block content %}
+
 <style>
-    /* تنسيق البحث والجانب الأيمن */
-    .sidebar-section {
-        background-color: #fff;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        height: 100%;
-        border: 1px solid rgba(109, 103, 73, 0.1);
+
+    .sidebar-section{
+        background-color:#fff;
+        border-radius:15px;
+        padding:20px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.05);
+        height:100%;
+        border:1px solid rgba(109,103,73,0.1);
+        margin-top:-00px;
+    }
+    .search-input{
+        border-radius:8px;
+        border:1px solid #ddd;
+        padding:10px;
+        margin-bottom:15px;
+        width:100%;
+    }
+    .map-container{
+        border-radius:15px;
+        overflow:hidden;
+        box-shadow:0 4px 15px rgba(0,0,0,0.1);
+        border:2px solid var(--primary-olive);
+    }
+    .section-title{
+        color:var(--primary-olive);
+        font-weight:bold;
+        font-size:1.1rem;
+        margin-bottom:20px;
+        border-bottom:2px solid var(--bg-cream);
+        padding-bottom:10px;
     }
 
-    .search-input {
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin-bottom: 15px;
-        width: 100%;
-    }
-
-    .map-container {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border: 2px solid var(--primary-olive);
-    }
-
-    .section-title {
-        color: var(--primary-olive);
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin-bottom: 20px;
-        border-bottom: 2px solid var(--bg-cream);
-        padding-bottom: 10px;
-    }
 </style>
 
 <div class="row g-4">
     <div class="col-md-9 order-md-1 order-2">
         <div class="map-container">
-            <div id="map" style="height: 550px; width: 100%;"></div>
+            <div id="map" style="height:550px;width:100%;"></div>
         </div>
     </div>
 
     <div class="col-md-3 order-md-2 order-1">
         <div class="sidebar-section">
-            <h5 class="section-title"><i class="fas fa-search-location"></i> ابحث عن مائدة</h5>
-            
-            <form method="GET" action="{% url 'home' %}">
-                <select name="governorate" class="form-select search-input">
-                    <option value="">اختر المحافظة...</option>
-                    <option value="Cairo">القاهرة</option>
-                    <option value="Giza">الجيزة</option>
-                    <option value="Dakahlia">الدقهلية</option>
-                    </select>
-                <button type="submit" class="btn btn-primary w-100 mb-4">
-                    <i class="fas fa-search"></i> بحث
-                </button>
-            </form>
+            <h5 class="section-title">
+                <i class="fas fa-search-location"></i>
+                ابحث عن مائدة
+            </h5>
 
-            <hr>
+        <form method="GET" action="{% url 'home' %}">
+            <select name="governorate" class="search-input">
+                <option value="">
+                    اختر المحافظة...
+                </option>
+                <option value="Cairo">
+                    القاهرة
+                </option>
+                <option value="Giza">
+                    الجيزة
+                </option>
+                <option value="Dakahlia">
+                    الدقهلية
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary w-100 mb-4">
+                <i class="fas fa-search"></i>
+                بحث
+            </button>
+        </form>
+        <hr>
 
-            <h5 class="section-title"><i class="fas fa-plus-circle"></i> شارك بالخير</h5>
-            <p class="text-muted small">هل تعرف مكان مائدة غير مسجلة؟ أضفها الآن لتنال الثواب.</p>
-            <a href="#" class="btn btn-add w-100">
-                <i class="fas fa-hand-holding-heart"></i> إضافة مائدة جديدة
-            </a>
-        </div>
+        <h5 class="section-title">
+            <i class="fas fa-plus-circle"></i>
+            شارك بالخير
+        </h5>
+        <p class="text-muted small">
+            هل تعرف مكان مائدة غير مسجلة؟ أضفها الآن لتنال الثواب.
+        </p>
+        <a href="{% url 'add_table' %}" class="btn btn-add w-100">
+            <i class="fas fa-hand-holding-heart"></i>
+            إضافة مائدة جديدة
+        </a>
     </div>
 </div>
 
+
 <script>
-  function initMap() {
-    const myLatLng = { lat: 31.0364, lng: 31.3807 }; // المنصورة كمثال
+function initMap() {
+    const center = { lat: 31.0364, lng: 31.3807 };
     const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 13,
-      center: myLatLng,
-      styles: [ /* هنا ممكن تضيف Styles للخريطة عشان تليق مع ألوان موقعك الزيتي */ ]
+        zoom: 12,
+        center: center,
     });
 
-    new google.maps.Marker({
-      position: myLatLng,
-      map: map,
-      title: "مائدة الرحمن",
+    const tables = JSON.parse('{{ tables|safe }}');
+
+    const icon = {
+    url: "{% static 'img/ramadan_marker.png' %}",
+    scaledSize: new google.maps.Size(80, 80), // حجم واضح
+    origin: new google.maps.Point(0,0),
+    anchor: new google.maps.Point(40,80) // تثبيت النقطة عند أسفل الأيقونة
+};
+
+tables.forEach(table => {
+    const marker = new google.maps.Marker({
+        position: { lat: table.lat, lng: table.long },
+        map: map,
+        title: table.title,
+        icon: icon
     });
-  }
+
+    const infowindow = new google.maps.InfoWindow({
+        content: `<h5>${table.title}</h5><p>${table.description}</p>`
+    });
+
+    marker.addListener("click", () => {
+        infowindow.open(map, marker);
+    });
+});
+}
 </script>
+
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"></script>
 
 {% endblock %}

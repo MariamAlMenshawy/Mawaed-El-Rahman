@@ -18,8 +18,12 @@ def home(request):
         })
 
     context = {
+<<<<<<< HEAD
         'api_key': settings.API_KEY,
         'tables': json.dumps(tables_data)
+=======
+        'api_key': settings.API_KEY
+>>>>>>> b0cb72133c3cba401c7c170f2f7a1613d0409b4e
     }
     return render(request, 'home.html', context)
 

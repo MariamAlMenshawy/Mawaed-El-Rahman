@@ -7,96 +7,142 @@
 {% endblock %}
 
 {% block add_button %}
-    
 {% endblock %}
 
 {% block content %}
 
 <style>
+/* sidebar */
+.sidebar-section{
+    background-color:#fff;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+    height:100%;
+    border:1px solid rgba(109,103,73,0.1);
+    direction: rtl;
+    text-align: right;
+}
 
-    .sidebar-section{
-        background-color:#fff;
-        border-radius:15px;
-        padding:20px;
-        box-shadow:0 4px 12px rgba(0,0,0,0.05);
-        height:100%;
-        border:1px solid rgba(109,103,73,0.1);
-        margin-top:-00px;
-    }
-    .search-input{
-        border-radius:8px;
-        border:1px solid #ddd;
-        padding:10px;
-        margin-bottom:15px;
-        width:100%;
-    }
-    .map-container{
-        border-radius:15px;
-        overflow:hidden;
-        box-shadow:0 4px 15px rgba(0,0,0,0.1);
-        border:2px solid var(--primary-olive);
-    }
-    .section-title{
-        color:var(--primary-olive);
-        font-weight:bold;
-        font-size:1.1rem;
-        margin-bottom:20px;
-        border-bottom:2px solid var(--bg-cream);
-        padding-bottom:10px;
-    }
+/* رمضان كريم */
+.sidebar-section .ramadan-header{
+    text-align:center;
+    font-size:1.4rem;
+    font-weight:bold;
+    color:#624a01;
+    margin-bottom:15px;
+}
 
+/* الآية القرآنية */
+.sidebar-section .quran-card{
+    background:#fef3d5;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-bottom:12px;
+    font-size:0.95rem;
+    color:#1a1a1a;
+    text-align:right;
+    direction:rtl;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    line-height:1.4;
+}
+
+/* الحديث الشريف */
+.sidebar-section .hadith-card{
+    background:#fdf6e3;
+    padding:12px 15px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-size:0.95rem;
+    color:#5b5130;
+    text-align:right;
+    direction:rtl;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    line-height:1.4;
+}
+
+/* عنوان وشرح الزر */
+.sidebar-section h5{
+    font-weight:bold;
+    color:#4b3f2f;
+    font-size:1.2rem;
+    margin-bottom:15px;
+}
+.sidebar-section p{
+    font-size:0.95rem;
+    color:#555;
+    margin-bottom:20px;
+}
+
+/* زر الإضافة */
+.btn-add{
+    background-color:#624a01;
+    color:#fff;
+    padding:12px 20px;
+    font-weight:bold;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center; /* النص في الوسط */
+    gap:8px;
+    transition:0.3s;
+}
+.btn-add:hover{
+    background-color:#967309;
+    color:white;
+}
+
+/* خريطة */
+.maptainer{
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+    border:2px solid #967309;
+}
 </style>
 
 <div class="row g-4">
+    <!-- الخريطة -->
     <div class="col-md-9 order-md-1 order-2">
         <div class="map-container">
             <div id="map" style="height:550px;width:100%;"></div>
         </div>
     </div>
 
+    <!-- sidebar -->
     <div class="col-md-3 order-md-2 order-1">
         <div class="sidebar-section">
-            <h5 class="section-title">
-                <i class="fas fa-search-location"></i>
-                ابحث عن مائدة
-            </h5>
 
-        <form method="GET" action="{% url 'home' %}">
-            <select name="governorate" class="search-input">
-                <option value="">
-                    اختر المحافظة...
-                </option>
-                <option value="Cairo">
-                    القاهرة
-                </option>
-                <option value="Giza">
-                    الجيزة
-                </option>
-                <option value="Dakahlia">
-                    الدقهلية
-                </option>
-            </select>
-            <button type="submit" class="btn btn-primary w-100 mb-4">
-                <i class="fas fa-search"></i>
-                بحث
-            </button>
-        </form>
-        <hr>
+            <!-- رمضان كريم -->
+            <div class="ramadan-header">
+                رمضان كريم 🌙
+            </div>
 
-        <h5 class="section-title">
-            <i class="fas fa-plus-circle"></i>
-            شارك بالخير
-        </h5>
-        <p class="text-muted small">
-            هل تعرف مكان مائدة غير مسجلة؟ أضفها الآن لتنال الثواب.
-        </p>
-        <a href="{% url 'add_table' %}" class="btn btn-add w-100">
-            <i class="fas fa-hand-holding-heart"></i>
-            إضافة مائدة جديدة
-        </a>
+            <!-- الآية القرآنية -->
+            <div class="quran-card">
+                قال تعالى:
+                <br>
+                ﴿مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ ۗ وَاللَّهُ يُضَاعِفُ لِمَن يَشَاءُ ۗ وَاللَّهُ وَاسِعٌ عَلِيمٌ﴾ 
+            </div>
+
+            <!-- الحديث الشريف -->
+            <div class="hadith-card">
+                قال النبي ﷺ:
+               <br>
+                "مَنْ فَطَّرَ صَائِمًا كَانَ لَهُ مِثْلُ أَجْرِهِ غَيْرَ أَنَّهُ لَا يَنقُصُ مِنْ أَجْرِ الصَّائِمِ شَيْئًا"
+            </div>
+
+            <!-- باقي محتوى sidebar -->
+            <hr>
+            <h5>شارك بالخير</h5>
+            <p>هل تعرف مكان مائدة غير مسجلة؟ أضفها الآن لتنال الثواب.</p>
+            <a href="{% url 'add_table' %}" class="btn btn-add w-100">
+                <i class="fas fa-hand-holding-heart"></i>
+                إضافة مائدة جديدة
+            </a>
+        </div>
     </div>
 </div>
-
 
 <script>
 function initMap() {
@@ -109,28 +155,34 @@ function initMap() {
     const tables = JSON.parse('{{ tables|safe }}');
 
     const icon = {
-    url: "{% static 'img/ramadan_marker.png' %}",
-    scaledSize: new google.maps.Size(80, 80), // حجم واضح
-    origin: new google.maps.Point(0,0),
-    anchor: new google.maps.Point(40,80) // تثبيت النقطة عند أسفل الأيقونة
-};
+        url: "{% static 'img/ramadan_marker.png' %}",
+        scaledSize: new google.maps.Size(80, 80),
+        origin: new google.maps.Point(0,0),
+        anchor: new google.maps.Point(40,80)
+    };
 
-tables.forEach(table => {
-    const marker = new google.maps.Marker({
-        position: { lat: table.lat, lng: table.long },
-        map: map,
-        title: table.title,
-        icon: icon
-    });
+    tables.forEach(table => {
+        const marker = new google.maps.Marker({
+            position: { lat: table.lat, lng: table.long },
+            map: map,
+            title: table.title,
+            icon: icon
+        });
 
-    const infowindow = new google.maps.InfoWindow({
-        content: `<h5>${table.title}</h5><p>${table.description}</p>`
-    });
+        const infowindow = new google.maps.InfoWindow({
+            content: `
+            <div style="min-width:200px; direction:rtl; text-align:right; padding:8px; background:#fff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+                <h5 style="margin:0 0 5px 0; color:#5b5130;">${table.title}</h5>
+                <p style="margin:0 0 8px 0; color:#555;">${table.description}</p>
+                <a href="/table/${table.id}/" class="btn btn-sm btn-primary">عرض التفاصيل</a>
+            </div>
+            `
+        });
 
-    marker.addListener("click", () => {
-        infowindow.open(map, marker);
+        marker.addListener("click", () => {
+            infowindow.open(map, marker);
+        });
     });
-});
 }
 </script>
 

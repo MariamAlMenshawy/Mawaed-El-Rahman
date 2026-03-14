@@ -114,10 +114,12 @@ hr {
             </div>
 
             <div class="actions-wrapper">
-                <div class="d-flex gap-3">
-                    <a href="{% url 'update_table' table.id %}?next={{ request.path }}" class="btn-custom btn-edit">تعديل البيانات</a>
-                    <a href="{% url 'delete_table' table.id %}" class="btn-custom btn-delete" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف المائدة</a>
-                </div>
+                {% if user.is_authenticated and user == table.created_by %}
+                        <div class="d-flex gap-3">
+                            <a href="{% url 'update_table' table.id %}?next={{ request.path }}" class="btn-custom btn-edit">تعديل البيانات</a>
+                            <a href="{% url 'delete_table' table.id %}" class="btn-custom btn-delete" onclick="return confirm('هل أنت متأكد من الحذف؟')">حذف المائدة</a>
+                        </div>
+                {% endif %}
             </div>
         </div>
 
